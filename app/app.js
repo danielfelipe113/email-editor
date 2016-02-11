@@ -80,6 +80,10 @@
                         Url: window.location.href
                     };
 
+                    if(console && console.error){
+                    	console.error(exceptionData);
+                    }
+
                     $.ajax({
                         method: 'POST',
                         url: '/api/applications',

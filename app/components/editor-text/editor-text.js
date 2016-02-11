@@ -1,9 +1,16 @@
-function editorTextDirective(angular, app) {
+window.editorText = function editorText(angular, app, onReadyCallback) {
 	'use strict';
 
-	app.directive('editorText', editorText);
 
-	editorText.$inject = ['$log', '_'];
+	// loads wysiwyg editor
+	require('./../froala/froala.js')(angular,app, function bootstrapEditor(){
+		app.directive('editorText', editorText);
+		if(typeof onReadyCallback === 'function'){
+			onReadyCallback();
+		}
+	});
+
+	editorText.$inject = ['$log', '_','$compile'];
 
 	/**
 	* @name app.directive: editorText
@@ -12,20 +19,28 @@ function editorTextDirective(angular, app) {
 	*  Email Text Editor
 	* 
 	* @example
-	<div data-text-editor></div>
+	<div data-editor-text></div>
 	 */
-	function editorText($log, _){
+	function editorText($log, _, compile){
+
+		console.log('editorText');
 
 		return {
 			restrict:'A',
 			link: link
 		};
 
-
 		function link(scope, element, attributes, ctrl){
+			console.log(element);
+			element = $(element);
 
+		    element.froalaEditor({
+		      toolbarInline: true,
+		      charCounterCount: false,
+		      toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'color', 'emoticons', '-', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'indent', 'outdent', '-', 'insertImage', 'insertLink', 'insertFile', 'insertVideo', 'undo', 'redo']
+		    });
 		}
 	}
-}
+};
 
-module.exports = editorTextDirective;
+module.exports = editorText;

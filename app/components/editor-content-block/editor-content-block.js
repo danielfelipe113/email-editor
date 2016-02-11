@@ -51,7 +51,8 @@ function editorContentBlockDirective(angular, app) {
 			 * @description Adds extra html needed for the content block:
 			 *              drop-here placeholders
 			 *              hover menu
-			 * @return {[type]} [description]
+			 *              overlay
+			 * @return {void}
 			 */
 			function setupContentBlockElements() {
 
@@ -114,24 +115,38 @@ function editorContentBlockDirective(angular, app) {
 
 				// foreach editable area, loads its editors
 				for (var i = 0; i < editableAreas.length; i++) {
+					var editableArea = $(editableAreas[i]);
 					
-					for(var keys in $(editableAreas[i]).data()){
+					for(var keys in editableArea.data()){
 
 						// check for data-editor attributes on editable area
 						if(keys.indexOf('editor') === 0 && !editorsLoaded[keys]){
-							window.module = {};
+
+							editorsLoaded[keys] = keys;
+
 							//converts editorText to editor-text
 							var parsedName = keys.replace(rmultiDash, "$1-$2" ).toLowerCase();
 
 							// /components/editor-text/editor-text.bundle.js
-							loadJS('/components/' + parsedName + '/' + parsedName + '.bundle.js', onEditorLoaded);
+							loadJS('/components/' + parsedName + '/' + parsedName + '.bundle.js', 
+								_.bind(onEditorLoaded, null, keys, editableArea));
 						}
 					}
 				}	
 			}
 
-			function onEditorLoaded(){
-				console.log(module.exports);
+			/**
+			 * Once the editor file is loaded, it bootstrap the directive and editable area
+			 * @param  {String} factoryName name of the directive factory
+			 * @param {jQueryObject} editableArea - DOM Element of the editable area
+			 *      IT NEEDS TO BE COMPILED once the directive is load
+			 * 
+			 * @return {void}
+			 */
+			function onEditorLoaded(factoryName, editableArea){
+				var editor = window[factoryName](angular, app, function compileEditableArea(){
+					compile(editableArea)(scope);
+				});
 			}
 
 			init();

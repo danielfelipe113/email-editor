@@ -1,9 +1,19 @@
-function froalaDirective(angular, app) {
+function froalaDirective(angular, app, onReadyCallback) {
 	'use strict';
 
-	app.directive('froala', froala);
+	loadCSS('/bower_components/froala-wysiwyg-editor/css/froala_editor.min.css');
+	loadCSS('/bower_components/froala-wysiwyg-editor/css/froala_style.min.css');
+	loadCSS('/bower_components/font-awesome/css/font-awesome.min.css');
+	loadJS('/bower_components/froala-wysiwyg-editor/js/froala_editor.min.js', function onFroalaLoaded(){
+		app.directive('froala', froala);
 
-	froala.$inject = ['$log', '_'];
+		if(typeof onReadyCallback === 'function'){
+			onReadyCallback();
+		}
+	});
+
+
+	froala.$inject = ['$log', '_','$q'];
 
 	/**
 	* @name app.directive: froala
@@ -14,10 +24,7 @@ function froalaDirective(angular, app) {
 	* @example
 	<froala></froala>
 	 */
-	function froala($log, _){
-
-		loadCSS('/bower_components/froala-wysiwyg-editor/css/froala_editor.min.css');
-		loadCSS('/bower_components/froala-wysiwyg-editor/css/froala_style.min.css');
+	function froala($log, _, $q){
 
 		return {
 			restrict:'E',
