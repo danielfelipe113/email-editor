@@ -27,7 +27,8 @@ function editorCanvasDirective(angular, app) {
 			replace:true,
 			scope: {
 				'getMessage':'&',
-				'onContentDropped':'&'
+				'onContentDropped':'&',
+				'undoRedoPromise':'&'
 			}
 		};
 
@@ -47,9 +48,12 @@ function editorCanvasDirective(angular, app) {
 			init();
 
     		function init(){
-        		element.on('scroll', onScrollEmitEvent);
 
-				scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
+					// TODO: listener on reorder for undo/redo
+
+      		element.on('scroll', onScrollEmitEvent);
+
+					scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {
 		        //     if (newValue === oldValue) {
 		        //         return;
@@ -61,7 +65,7 @@ function editorCanvasDirective(angular, app) {
 		        //         element.removeClass('hideOverlays');
 		        //     }
 		        // });
-        	}
+      		}
 
         	/**
         	 * @name setupDroppableArea
@@ -168,7 +172,7 @@ function editorCanvasDirective(angular, app) {
 	                // sort
 
 	                var id = ui.item.data('id');
-	                
+
 	                if(ui.item.next().hasClass('drop-here')){
 	                	ui.item.next().insertBefore(ui.item);
 	                }

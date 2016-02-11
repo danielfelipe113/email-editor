@@ -13,7 +13,7 @@
 			'$filterProvider',
 			'$provide',
 			function appConfig($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
-	
+
 				app.controller = $controllerProvider.register;
 				app.directive = $compileProvider.directive;
 				app.filter = $filterProvider;
@@ -79,6 +79,10 @@
                         stackTrace: stack.join('\n'),
                         Url: window.location.href
                     };
+
+                    if(console && console.error){
+                      console.error(exceptionData);
+                    }
 
                     $.ajax({
                         method: 'POST',

@@ -6,6 +6,7 @@ function alternativeEditorDirective(angular, app) {
 	//services
 	require('./../../services/content-block.js')(angular, app);
 	require('./../../services/message-service.js')(angular, app);
+	require('./../../services/editor-actions.js')(angular, app);
 
 	// directives
 	require('./../draggable-content-block/draggable-content-block.js')(angular, app);
@@ -14,7 +15,7 @@ function alternativeEditorDirective(angular, app) {
 
 	app.directive('fbAlternativeEditor', alternativeEditorDirective);
 
-	alternativeEditorDirective.$inject = ['$log', '_', 'alternative-editor.template.html', 'contentBlockService', 'messageService', '$compile'];
+	alternativeEditorDirective.$inject = ['$log', '_', 'alternative-editor.template.html', 'contentBlockService', 'messageService', 'editorActionsService', '$compile', '$q'];
 
 	/**
 	* @name app.directive: fbEmailEditor
@@ -26,7 +27,7 @@ function alternativeEditorDirective(angular, app) {
 	<fb-email-editor data-config="home.modalLoginConfig">
 	</fb-email-editor>
 	 */
-	function alternativeEditorDirective($log, _, template, cbService, messageService, compile){
+	function alternativeEditorDirective($log, _, template, cbService, messageService, actionsService, compile, $q){
 
 		return {
 			restrict:'E',
@@ -61,8 +62,17 @@ function alternativeEditorDirective(angular, app) {
 			 */
 			function init(){
 				_.extend(self, {
-					getMessage:getMessage
+					getMessage:getMessage,
+					undo: undo,
+					redo: redo
 				});
+
+				self.undoRedoPromise = $q.defer();
+				self.performUndoRedo = $q.defer();
+
+				self.undoRedoPromise.promise.then(null, function(change){
+					actionsService.saveChanges(change);
+				}, null);
 
 				cbService.getAll().then(function onAllCb(response){
 					self.contentBlocks = response;
@@ -72,6 +82,16 @@ function alternativeEditorDirective(angular, app) {
 			function getMessage(){
 				// TODO: Check if we are trying to edit an email, or creating a new one.
 				return messageService.get();
+			}
+
+			function undo() {
+				var collection = actionsService.saveUndo();
+				self.performUndoRedo.notify(collection);
+			}
+
+			function redo() {
+				var collection = actionsService.saveRedo();
+				self.performUndoRedo.notify(collection);
 			}
 		}
 
