@@ -13,7 +13,7 @@
 			'$filterProvider',
 			'$provide',
 			function appConfig($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
-	
+
 				app.controller = $controllerProvider.register;
 				app.directive = $compileProvider.directive;
 				app.filter = $filterProvider;

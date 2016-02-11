@@ -7,8 +7,8 @@
         <div class="container-fluid">
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Undo</a></li>
-                <li><a href="#">Redo</a></li>
+                <li><a href="#" data-ng-click="editorCtrl.undo()">Undo</a></li>
+                <li><a href="#" data-ng-click="editorCtrl.redo()">Redo</a></li>
                 <li><a href="#">Settings</a></li>
                 <li><a href="#">Help</a></li>
                 </ul>
@@ -32,7 +32,10 @@
             <!-- end side bar-->
             <!-- content -->
             <div class="col-xs-12 col-md-offset-2 col-md-10" id="content">
-                <editor-canvas data-get-message="editorCtrl.getMessage()" class="content">
+                <editor-canvas class="content"
+                  data-get-message="editorCtrl.getMessage()"
+                  data-undo-redo-promise="editorCtrl.undoRedoPromise" 
+                  data-perform-undo-redo="editorCtrl.performUndoRedo">
                 </editor-canvas>
             </div>
             <!--end content-->
