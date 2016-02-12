@@ -159,8 +159,9 @@ function editorCanvasDirective(angular, app) {
 	                // }
 
 	                //create the content block
-	                var cb = compileContentBlock(ui.item.find('> div').data('droppedHtml'));
+	                var cb = $(ui.item.find('> div').data('droppedHtml'));
 	                ui.item.replaceWith(cb);
+	                compileContentBlock(cb);
 
 	                // //notify subscribers
 	                // scope.contentChanged(configuration.contentBlockEvents.Created, scope.$id, cb.data('id'), null,
@@ -227,10 +228,9 @@ function editorCanvasDirective(angular, app) {
 		     */
 		    function compileContentBlock(contentBlock, attrs) {
 		        attrs = attrs || {};
-		        var contentBlockElement = $(contentBlock);
 		        //contentBlockElement.addClass(constants.contentBlockClass).attr(attrs);
 
-		        return compile(contentBlockElement)(scope);
+		        return compile(contentBlock)(scope);
 		    }
 
 
