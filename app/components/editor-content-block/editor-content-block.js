@@ -67,12 +67,7 @@ function editorContentBlockDirective(angular, app) {
 				hoverMenuBar.find('.duplicate').on('click', function duplicateContentBlock(){
 					var duplicate = getCleanHtml(element.clone());
 					duplicate.insertAfter(element);
-<<<<<<< HEAD
-=======
-
 					notifyChange('duplicate', 1, duplicate.data('id'), '', $.fn.outerHTML(duplicate));
-
->>>>>>> 5742af4f09464de345845ecf462e34c04f4af495
 					compile(duplicate)(scope);
 				});
 
