@@ -70,9 +70,9 @@ function alternativeEditorDirective(angular, app) {
 				self.undoRedoPromise = $q.defer();
 				self.performUndoRedo = $q.defer();
 
-				self.undoRedoPromise.promise.then(null, function(change){
+				self.undoRedoPromise.promise.then(null, null, function(change){
 					actionsService.saveChanges(change);
-				}, null);
+				});
 
 				cbService.getAll().then(function onAllCb(response){
 					self.contentBlocks = response;

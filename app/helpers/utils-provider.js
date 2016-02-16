@@ -1,7 +1,40 @@
 function utilsProvider(angular, app, $){
 
 	'use strict';
-		
+
+    /**
+     * Replacement for jQuery replaceWith method, to trigger a custom element
+     * @type {Object} - jQuery element
+     * http://stackoverflow.com/questions/7167085/on-append-do-something
+     */
+    var originalReplaceWith = $.fn.replaceWith;
+    $.fn.replaceWith = function () {
+         // Make a list of arguments that are jQuery objects
+        var replacements = $.makeArray(arguments).filter(function(arg){
+            return arg instanceof $;
+        });
+
+         // Call the actual function
+        var returnValue = originalReplaceWith.apply(this, arguments);
+
+        for (var i = 0; i < replacements.length; ++i)
+        {
+            replacements[i].trigger('replacedElement');
+        }
+
+        returnValue.trigger('replaceWith');
+
+        return returnValue;
+    };
+
+		//cross browser outer html support
+		$.fn.outerHTML = function (s) {
+				if (!$(s).length) {
+						return false;
+				}
+				return $(s).clone().wrap('<p>').parent().html();
+		};
+
     app.factory('utils', [
 		function utilsProvider(){
 
@@ -28,7 +61,7 @@ function utilsProvider(angular, app, $){
                 if (window.event)
                     key = window.event.keyCode; //IE
                 else
-                    key = e.which; //firefox      
+                    key = e.which; //firefox
 
                 if (key == 13) {
                     e.returnValue = false;
@@ -41,7 +74,7 @@ function utilsProvider(angular, app, $){
             }
 
 			return {
-				preventSubmit: preventSubmit	
+				preventSubmit: preventSubmit
 			};
 		}
 	]);
