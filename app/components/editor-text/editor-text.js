@@ -35,6 +35,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 			var contentBlock = element.parents('.'+ constants.contentBlockClass +':eq(0)'),
 				actionType = 'Text Editor Change',
 				lastValue,
+				contentBlockId,
 				defaultValue;			
 
 			function init(){
