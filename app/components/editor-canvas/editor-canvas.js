@@ -22,7 +22,7 @@ function editorCanvasDirective(angular, app) {
 		return {
 			restrict:'E',
 			link: link,
-			template: '<div id="editor-canvas" data-ng-class="{dragging : !!dragging}" data-ng-transclude="true"></div>',
+			template: '<div id="editor-canvas" data-ng-transclude="true"></div>',
 			transclude:true,
 			replace:true,
 			scope: {
@@ -49,18 +49,16 @@ function editorCanvasDirective(angular, app) {
 			init();
 
     		function init(){
-					// TODO: listener on reorder for undo/redo
-					scope.performUndoRedo.promise.then(null, null, function(change){
-						console.log('REORDER PROMISE', change);
-						if(change.actionType === 'reorder') {
-							//scope.performReorder(actionDescriptor);
-						}
-						return change;
-					});
+				// TODO: listener on reorder for undo/redo
+				scope.performUndoRedo.promise.then(null, null, function(change){
+					console.log('REORDER PROMISE', change);
+					if(change.actionType === 'reorder') {
+						//scope.performReorder(actionDescriptor);
+					}
+					return change;
+				});
 
-      		element.on('scroll', onScrollEmitEvent);
-
-					scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
+				scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {
 		        //     if (newValue === oldValue) {
 		        //         return;
