@@ -49,16 +49,17 @@ function editorCanvasDirective(angular, app) {
 			init();
 
     		function init(){
-				// TODO: listener on reorder for undo/redo
-				scope.performUndoRedo.promise.then(null, null, function(change){
-					console.log('REORDER PROMISE', change);
-					if(change.actionType === 'reorder') {
-						//scope.performReorder(actionDescriptor);
-					}
-					return change;
-				});
+					// TODO: listener on reorder for undo/redo
+					scope.performUndoRedo.promise.then(null, null, function(change){
+						console.log('REORDER PROMISE', change);
+						if(change.actionType === 'reorder') {
+							//scope.performReorder(actionDescriptor);
+						}
+						return change;
+					});
 
-				scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
+					scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
+
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {
 		        //     if (newValue === oldValue) {
 		        //         return;
@@ -137,55 +138,49 @@ function editorCanvasDirective(angular, app) {
 			}
 
 			function onDropUpdate(e, ui) {
+				var change;
+
 				element.removeClass('dragging');
-		        // this event is triggered in two occasions,
-		        // 1) when we sort the content blocks inside the editor (prevent to pub the changed event -this is done on the drop stop event-)
-		        // 2) when we drop a layout content block
-		        if (ui.item.hasClass(constants.draggableContentBlockClass)) {
-								//create the content block
-								var cb = $(ui.item.find('> div').data('droppedHtml'));
-								ui.item.replaceWith(cb);
-								compileContentBlock(cb);
+        // this event is triggered in two occasions,
+        // 1) when we sort the content blocks inside the editor (prevent to pub the changed event -this is done on the drop stop event-)
+        // 2) when we drop a layout content block
+        if (ui.item.hasClass(constants.draggableContentBlockClass)) {
+						//create the content block
+						var cb = $(ui.item.find('> div').data('droppedHtml'));
+						ui.item.replaceWith(cb);
+						compileContentBlock(cb);
 
-		            // //notify subscribers
-		            // scope.contentChanged(configuration.contentBlockEvents.Created, scope.$id, cb.data('id'), null,
-		            // {
-		            //     position: element.find('.' + configuration.contentBlockClass).index(cb),
-		            //     value: $.fn.outerHTML(cb)
-		            // });
-		        } else {
-		            // sort
+						change = { actionType: 'add', target: 1, contentBlockId: cb.data('id'), previousValue: '', currentValue: $.fn.outerHTML(cb), position: element.find('.' + constants.contentBlockClass).index(cb) };
+						scope.undoRedoPromise.notify(change);
+        } else {
+            // sort
+            var id = ui.item.data('id');
 
-		            var id = ui.item.data('id');
+            if(ui.item.next().hasClass('drop-here')){
+            	ui.item.next().insertBefore(ui.item);
+            }
 
-		            if(ui.item.next().hasClass('drop-here')){
-		            	ui.item.next().insertBefore(ui.item);
-		            }
+            var dropHere = element.find('.drop-here[data-content-block='+ id +']');
+            dropHere.insertAfter(ui.item);
 
-		            var dropHere = element.find('.drop-here[data-content-block='+ id +']');
-		            dropHere.insertAfter(ui.item);
+						change = { actionType: 'sort', target: 1, contentBlockId: id, position: element.find('.' + constants.contentBlockClass).index(ui.item) };
+						scope.undoRedoPromise.notify(change);
+        }
+    	}
 
-		            // scope.contentChanged(configuration.contentBlockEvents.Reordered, scope.$id, ui.item.data('id'), scope.dragStartPosition,
-		            // {
-		            //     position: element.find('.' + configuration.contentBlockClass).index(ui.item),
-		            //     value: $.fn.outerHTML(ui.item)
-		            // });
-		        }
-    		}
+	    /**
+	     * @description compiles the html of a content block to a content block directive
+	     * @param  {[type]}
+	     * @param  {[type]}
+	     * @return {[type]}
+	     */
+	    function compileContentBlock(contentBlock, attrs) {
+	        attrs = attrs || {};
+	        var contentBlockElement = $(contentBlock);
+	        //contentBlockElement.addClass(constants.contentBlockClass).attr(attrs);
 
-		    /**
-		     * @description compiles the html of a content block to a content block directive
-		     * @param  {[type]}
-		     * @param  {[type]}
-		     * @return {[type]}
-		     */
-		    function compileContentBlock(contentBlock, attrs) {
-		        attrs = attrs || {};
-		        var contentBlockElement = $(contentBlock);
-		        //contentBlockElement.addClass(constants.contentBlockClass).attr(attrs);
-
-		        return compile(contentBlockElement)(scope);
-		    }
+	        return compile(contentBlockElement)(scope);
+	    }
 
 		}
 	}
