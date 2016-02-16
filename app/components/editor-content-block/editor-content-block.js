@@ -97,11 +97,9 @@ function editorContentBlockDirective(angular, app) {
 								.addClass('editActive');
 						}
 					)
-					.on('blur', function editModeLeave(e){
+					.on('editDisable', function editModeLeave(e){
 						element
-							.removeClass('editActive')
-							.trigger('editDisable');
-
+							.removeClass('editActive');
 					});
 
 				loadEditors();

@@ -138,54 +138,54 @@ function editorCanvasDirective(angular, app) {
 
 			function onDropUpdate(e, ui) {
 				element.removeClass('dragging');
-        // this event is triggered in two occasions,
-        // 1) when we sort the content blocks inside the editor (prevent to pub the changed event -this is done on the drop stop event-)
-        // 2) when we drop a layout content block
-        if (ui.item.hasClass(constants.draggableContentBlockClass)) {
-						//create the content block
-						var cb = $(ui.item.find('> div').data('droppedHtml'));
-						ui.item.replaceWith(cb);
-						compileContentBlock(cb);
+		        // this event is triggered in two occasions,
+		        // 1) when we sort the content blocks inside the editor (prevent to pub the changed event -this is done on the drop stop event-)
+		        // 2) when we drop a layout content block
+		        if (ui.item.hasClass(constants.draggableContentBlockClass)) {
+								//create the content block
+								var cb = $(ui.item.find('> div').data('droppedHtml'));
+								ui.item.replaceWith(cb);
+								compileContentBlock(cb);
 
-            // //notify subscribers
-            // scope.contentChanged(configuration.contentBlockEvents.Created, scope.$id, cb.data('id'), null,
-            // {
-            //     position: element.find('.' + configuration.contentBlockClass).index(cb),
-            //     value: $.fn.outerHTML(cb)
-            // });
-        } else {
-            // sort
+		            // //notify subscribers
+		            // scope.contentChanged(configuration.contentBlockEvents.Created, scope.$id, cb.data('id'), null,
+		            // {
+		            //     position: element.find('.' + configuration.contentBlockClass).index(cb),
+		            //     value: $.fn.outerHTML(cb)
+		            // });
+		        } else {
+		            // sort
 
-            var id = ui.item.data('id');
+		            var id = ui.item.data('id');
 
-            if(ui.item.next().hasClass('drop-here')){
-            	ui.item.next().insertBefore(ui.item);
-            }
+		            if(ui.item.next().hasClass('drop-here')){
+		            	ui.item.next().insertBefore(ui.item);
+		            }
 
-            var dropHere = element.find('.drop-here[data-content-block='+ id +']');
-            dropHere.insertAfter(ui.item);
+		            var dropHere = element.find('.drop-here[data-content-block='+ id +']');
+		            dropHere.insertAfter(ui.item);
 
-            // scope.contentChanged(configuration.contentBlockEvents.Reordered, scope.$id, ui.item.data('id'), scope.dragStartPosition,
-            // {
-            //     position: element.find('.' + configuration.contentBlockClass).index(ui.item),
-            //     value: $.fn.outerHTML(ui.item)
-            // });
-        }
-    	}
+		            // scope.contentChanged(configuration.contentBlockEvents.Reordered, scope.$id, ui.item.data('id'), scope.dragStartPosition,
+		            // {
+		            //     position: element.find('.' + configuration.contentBlockClass).index(ui.item),
+		            //     value: $.fn.outerHTML(ui.item)
+		            // });
+		        }
+    		}
 
-	    /**
-	     * @description compiles the html of a content block to a content block directive
-	     * @param  {[type]}
-	     * @param  {[type]}
-	     * @return {[type]}
-	     */
-	    function compileContentBlock(contentBlock, attrs) {
-	        attrs = attrs || {};
-	        var contentBlockElement = $(contentBlock);
-	        //contentBlockElement.addClass(constants.contentBlockClass).attr(attrs);
+		    /**
+		     * @description compiles the html of a content block to a content block directive
+		     * @param  {[type]}
+		     * @param  {[type]}
+		     * @return {[type]}
+		     */
+		    function compileContentBlock(contentBlock, attrs) {
+		        attrs = attrs || {};
+		        var contentBlockElement = $(contentBlock);
+		        //contentBlockElement.addClass(constants.contentBlockClass).attr(attrs);
 
-	        return compile(contentBlockElement)(scope);
-	    }
+		        return compile(contentBlockElement)(scope);
+		    }
 
 		}
 	}

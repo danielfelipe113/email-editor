@@ -59,16 +59,16 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 			 */
 			function setupFroala(){
 				contentBlock
-						.on('editEnable.editorText', onEditorFocus)
-						.on('editDisable.editorText', onEditorBlur);
+						.on('editEnable', onEditorFocus);
 
 				element
 				    .froalaEditor({
 						toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'indent', 'outdent', 'insertImage', 'insertLink', 'insertFile', 'insertVideo', 'undo', 'redo'],
-				    }).
-				    froalaEditor('', function onInitialized(){
+				    })
+				    .on('froalaEditor.initialized', function onInitialized(e, editor){
 			        	//lastValue = instance.getData();
-				    });
+				    })
+				    .on('froalaEditor.blur', onEditorBlur);
 
 				// CKEDITOR.config.scayt_autoStartup = configuration.autoSpellCheck;
 			}
@@ -79,6 +79,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 			 * @return {[type]}   [description]
 			 */
 			function onEditorBlur(e){
+				contentBlock.trigger('editDisable');
 				// /// restore default text if the user doesnt set any text
 				// if (element.hasClass(configuration.contentBlockDefaultValue) && instance.getData() === '') {
 				//     instance.setData(configuration.defaultValueText);
