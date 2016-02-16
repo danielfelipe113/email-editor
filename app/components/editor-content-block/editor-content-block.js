@@ -67,9 +67,7 @@ function editorContentBlockDirective(angular, app) {
 				hoverMenuBar.find('.duplicate').on('click', function duplicateContentBlock(){
 					var duplicate = getCleanHtml(element.clone());
 					duplicate.insertAfter(element);
-
 					notifyChange('duplicate', 1, duplicate.data('id'), '', $.fn.outerHTML(duplicate));
-
 					compile(duplicate)(scope);
 				});
 
@@ -88,6 +86,21 @@ function editorContentBlockDirective(angular, app) {
 					overlay.height(element.height()).width(element.width());
 					overlay.position({ my: 'center center', at: 'center center', of: element, collision: 'none', within: element });
 				});
+
+				// adding active class
+				element
+					.on('click', 
+						'.' + constants.overlayClass + ', .' + constants.overlayMenuBarClass + ' .edit',
+						function onClick(){
+							element
+								.trigger('editEnable')
+								.addClass('editActive');
+						}
+					)
+					.on('editDisable', function editModeLeave(e){
+						element
+							.removeClass('editActive');
+					});
 
 				loadEditors();
 			}

@@ -22,7 +22,7 @@ function editorCanvasDirective(angular, app) {
 		return {
 			restrict:'E',
 			link: link,
-			template: '<div id="editor-canvas" data-ng-class="{dragging : !!dragging}" data-ng-transclude="true"></div>',
+			template: '<div id="editor-canvas" data-ng-transclude="true"></div>',
 			transclude:true,
 			replace:true,
 			scope: {
@@ -59,6 +59,7 @@ function editorCanvasDirective(angular, app) {
 					});
 
 					scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
+
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {
 		        //     if (newValue === oldValue) {
 		        //         return;
