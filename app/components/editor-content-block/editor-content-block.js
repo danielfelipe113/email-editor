@@ -23,7 +23,9 @@ function editorContentBlockDirective(angular, app) {
 		return {
 			restrict:'C',
 			link: link,
-			scope: {}
+			scope: {
+				undoRedoPromise: '='
+			}
 		};
 
 
@@ -43,6 +45,12 @@ function editorContentBlockDirective(angular, app) {
 					// set a listener to add extra-html once the content block is dropped on a email
 					element.one('replacedElement', setupContentBlockElements);
 				}
+
+				/*scope.performUndoRedo.promise.then(null, function(change){
+					if(change.actionType === 'remove'){
+					 	console.log('removed!', change);
+					}
+				}, null);*/
 
 			}
 
@@ -69,11 +77,15 @@ function editorContentBlockDirective(angular, app) {
 					var duplicate = getCleanHtml(element.clone());
 					duplicate.insertAfter(element);
 
+					notifyChange('duplicate', 1, duplicate.data('id'), '', $.fn.outerHTML(duplicate));
+
 					compile(duplicate)(scope);
 				});
 
 				hoverMenuBar.find('.delete').on('click', function deleteContentBlock(){
 					element.remove();
+
+					notifyChange('remove', 1, element.data('id'), $.fn.outerHTML(element), '');
 				});
 
 				var overlay = $('#viewTemplates .' + constants.overlayClass).clone();
@@ -90,6 +102,22 @@ function editorContentBlockDirective(angular, app) {
 			}
 
 			/**
+			 * @name notifyChange
+			 * @description Notifies changes to the actions service for undo/redo
+			 */
+			function notifyChange(type, target, cbId, previous, current) {
+				var change = {
+					actionType: type,
+					target: target,
+					contentBlockId: cbId,
+					previousValue: previous,
+					currentValue: current
+				};
+
+				scope.undoRedoPromise.notify(change);
+			}
+
+			/**
 			 * @name getCleanHtml
 			 * @description Removes content block extra elements from cloned content block
 			 * @return {[type]} [description]
@@ -99,7 +127,7 @@ function editorContentBlockDirective(angular, app) {
 					.removeClass('ng-isolate-scope ng-scope')
 					.find('.' + constants.overlayClass + ', .' + constants.overlayMenuBarClass)
 					.remove();
-				return contentBlockHtml;			
+				return contentBlockHtml;
 			}
 
 			/**
@@ -116,7 +144,7 @@ function editorContentBlockDirective(angular, app) {
 				// foreach editable area, loads its editors
 				for (var i = 0; i < editableAreas.length; i++) {
 					var editableArea = $(editableAreas[i]);
-					
+
 					for(var keys in editableArea.data()){
 
 						// check for data-editor attributes on editable area
@@ -128,11 +156,11 @@ function editorContentBlockDirective(angular, app) {
 							var parsedName = keys.replace(rmultiDash, "$1-$2" ).toLowerCase();
 
 							// /components/editor-text/editor-text.bundle.js
-							loadJS('/components/' + parsedName + '/' + parsedName + '.bundle.js', 
+							loadJS('/components/' + parsedName + '/' + parsedName + '.bundle.js',
 								_.bind(onEditorLoaded, null, keys, editableArea));
 						}
 					}
-				}	
+				}
 			}
 
 			/**
@@ -140,7 +168,7 @@ function editorContentBlockDirective(angular, app) {
 			 * @param  {String} factoryName name of the directive factory
 			 * @param {jQueryObject} editableArea - DOM Element of the editable area
 			 *      IT NEEDS TO BE COMPILED once the directive is load
-			 * 
+			 *
 			 * @return {void}
 			 */
 			function onEditorLoaded(factoryName, editableArea){

@@ -9,11 +9,13 @@ function editorActionsServiceWrapper(angular, app) {
 	function editorActionsService(constants, values, $q, $http, messageService){
 
     function getBrowserCollection() {
-        return localStorage.getItem(constants.storageEditorContentKey);
+				var collection = JSON.parse(localStorage.getItem(constants.storageEditorContentKey));
+				console.log('GETTING FROM LS', collection);
+        return collection;
     }
 
     function saveBrowserCollection(collection) {
-        localStorage.setItem(constants.storageEditorContentKey, collection);
+        localStorage.setItem(constants.storageEditorContentKey, JSON.stringify(collection));
     }
 
     function saveChanges(change) {
