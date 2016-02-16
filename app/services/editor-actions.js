@@ -56,7 +56,9 @@ function editorActionsServiceWrapper(angular, app) {
     }
 
 		function saveUndo(){
-      console.log('save undo');
+      var collection = getBrowserCollection();
+
+			return collection.history[collection.history.length - 1];
 		}
 
     function saveRedo(){
