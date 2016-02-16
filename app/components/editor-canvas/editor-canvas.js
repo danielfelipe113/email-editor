@@ -144,9 +144,10 @@ function editorCanvasDirective(angular, app) {
         // 1) when we sort the content blocks inside the editor (prevent to pub the changed event -this is done on the drop stop event-)
         // 2) when we drop a layout content block
         if (ui.item.hasClass(constants.draggableContentBlockClass)) {
-            //create the content block
-            var cb = compileContentBlock(ui.item.find('> div').data('droppedHtml'));
-            ui.item.replaceWith(cb);
+						//create the content block
+						var cb = $(ui.item.find('> div').data('droppedHtml'));
+						ui.item.replaceWith(cb);
+						compileContentBlock(cb);
 
             // //notify subscribers
             // scope.contentChanged(configuration.contentBlockEvents.Created, scope.$id, cb.data('id'), null,
@@ -173,37 +174,6 @@ function editorCanvasDirective(angular, app) {
             // });
         }
     	}
-
-    	/**
-    	 * @return {[type]}
-    	 */
-	    function onScrollEmitEvent() {
-	        if (!didScroll) {
-
-	            if (!!$window.requestAnimationFrame) {
-	                $window.requestAnimationFrame(update);
-	            } else {
-	                timeout(function() {
-	                    update();
-	                }, 250);
-	            }
-	        }
-	        didScroll = true;
-	    }
-
-	    /**
-	     * @return {[type]}
-	     */
-	    function update() {
-
-	        if (didScroll) {
-	            didScroll = false;
-
-	            // contextual editors subscribed to the event can do what they want to
-	            editorEvents.canvasScrolling();
-	        }
-	    }
-
 
 	    /**
 	     * @description compiles the html of a content block to a content block directive

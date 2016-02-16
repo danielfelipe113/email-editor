@@ -23,21 +23,36 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 	 */
 	function editorText($log, _, compile){
 
-		console.log('editorText');
-
 		return {
 			restrict:'A',
 			link: link
 		};
 
 		function link(scope, element, attributes, ctrl){
-			console.log(element);
 			element = $(element);
+			var contentBlock = element.parents('.editor-content-block:eq(0)');
 
 		    element.froalaEditor({
-		      toolbarInline: true,
-		      charCounterCount: false,
-		      toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'color', 'emoticons', '-', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'indent', 'outdent', '-', 'insertImage', 'insertLink', 'insertFile', 'insertVideo', 'undo', 'redo']
+		    	initOnClick:true,
+				toolbarInline:true,
+				toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'indent', 'outdent', 'insertImage', 'insertLink', 'insertFile', 'insertVideo', 'undo', 'redo'],
+				// heightMax:50
+		    });
+
+			contentBlock.on('click',
+				'.content-block-overlay, .content-block-menu-bar .edit', 
+				function onContentBlockClick(e){
+					contentBlock.addClass('active');
+					element.froalaEditor('events.focus');
+				}
+			);
+
+
+
+		    scope.$on('$destroy', function onDestroy(){
+				element
+					.parents('.editor-content-block').find('.content-block-overlay, .content-block-menu-bar .edit')
+					.off();
 		    });
 		}
 	}

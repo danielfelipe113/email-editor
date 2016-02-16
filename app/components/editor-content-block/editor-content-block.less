@@ -5,6 +5,11 @@
 		display:block;
 	}
 
+	.editor-content-block.active > .content-block-menu-bar,
+	.editor-content-block.active .content-block-overlay{
+		display: none;
+	}
+
 	.content-block-overlay {
 		position: absolute;
 		display: none;
@@ -17,10 +22,10 @@
 		position: absolute;
 		display: none;
 		padding: 10px;
-    background-color:#484848;
-    border:1px white solid;
-    text-align:center;
-    width:200px;
+	    background-color:#484848;
+	    border:1px white solid;
+	    text-align:center;
+	    width:200px;
 		z-index: 100;
 
 		a {

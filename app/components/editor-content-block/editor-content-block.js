@@ -36,22 +36,13 @@ function editorContentBlockDirective(angular, app) {
 				element = $(element);
 				element.attr('data-id', scope.$id);
 
-				// if the content block comes on the email from the beginning (editing emails)
-				// then, add the extra-html needed for that content block
-				if(element.parents('.' + constants.canvasClass).length){
-					setupContentBlockElements();
-				}
-				else{
-					// set a listener to add extra-html once the content block is dropped on a email
-					element.one('replacedElement', setupContentBlockElements);
-				}
-
 				/*scope.performUndoRedo.promise.then(null, function(change){
 					if(change.actionType === 'remove'){
 					 	console.log('removed!', change);
 					}
 				}, null);*/
 
+				setupContentBlockElements();
 			}
 
 			/**
