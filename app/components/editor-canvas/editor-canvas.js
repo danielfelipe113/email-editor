@@ -58,8 +58,6 @@ function editorCanvasDirective(angular, app) {
 						return change;
 					});
 
-      		element.on('scroll', onScrollEmitEvent);
-
 					scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {
 		        //     if (newValue === oldValue) {
@@ -139,6 +137,8 @@ function editorCanvasDirective(angular, app) {
 			}
 
 			function onDropUpdate(e, ui) {
+				var change;
+
 				element.removeClass('dragging');
         // this event is triggered in two occasions,
         // 1) when we sort the content blocks inside the editor (prevent to pub the changed event -this is done on the drop stop event-)
@@ -149,15 +149,10 @@ function editorCanvasDirective(angular, app) {
 						ui.item.replaceWith(cb);
 						compileContentBlock(cb);
 
-            // //notify subscribers
-            // scope.contentChanged(configuration.contentBlockEvents.Created, scope.$id, cb.data('id'), null,
-            // {
-            //     position: element.find('.' + configuration.contentBlockClass).index(cb),
-            //     value: $.fn.outerHTML(cb)
-            // });
+						change = { actionType: 'add', target: 1, contentBlockId: cb.data('id'), previousValue: '', currentValue: $.fn.outerHTML(cb), position: element.find('.' + constants.contentBlockClass).index(cb) };
+						scope.undoRedoPromise.notify(change);
         } else {
             // sort
-
             var id = ui.item.data('id');
 
             if(ui.item.next().hasClass('drop-here')){
@@ -167,11 +162,8 @@ function editorCanvasDirective(angular, app) {
             var dropHere = element.find('.drop-here[data-content-block='+ id +']');
             dropHere.insertAfter(ui.item);
 
-            // scope.contentChanged(configuration.contentBlockEvents.Reordered, scope.$id, ui.item.data('id'), scope.dragStartPosition,
-            // {
-            //     position: element.find('.' + configuration.contentBlockClass).index(ui.item),
-            //     value: $.fn.outerHTML(ui.item)
-            // });
+						change = { actionType: 'sort', target: 1, contentBlockId: id, position: element.find('.' + constants.contentBlockClass).index(ui.item) };
+						scope.undoRedoPromise.notify(change);
         }
     	}
 
