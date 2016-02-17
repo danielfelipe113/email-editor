@@ -35,11 +35,10 @@
                 ]);
 
 
-				$urlRouterProvider.otherwise('/alternative');
+				$urlRouterProvider.otherwise('/home');
 
 				$stateProvider
-					.state('home', getStateConfig('/home', 'home.template.html', 'homeCtrl', 'home'))
-					.state('alternative', getStateConfig('/alternative', 'alternative.template.html', 'alternativeCtrl', 'alternative'));
+					.state('home', getStateConfig('/home', 'home.template.html', 'homeCtrl', 'home'));
 			}
 		])
 		.run([

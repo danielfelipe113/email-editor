@@ -48,6 +48,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 			    });
 
 			    // get content block id
+			    contentBlockId = contentBlock.data('id');
 
 			    // undo/redo events
 			    // editorEvents.onPerformUndoRedo(scope, performAction);
@@ -64,7 +65,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 
 				element
 				    .froalaEditor({
-						toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'indent', 'outdent', 'insertImage', 'insertLink', 'insertFile', 'insertVideo', 'undo', 'redo'],
+						toolbarButtons: constants.textEditorToolbar,
 				    })
 				    .on('froalaEditor.initialized', function onInitialized(e, editor){
 			        	//lastValue = instance.getData();

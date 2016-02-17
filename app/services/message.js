@@ -8,16 +8,18 @@ function messageServiceWrapper(angular, app) {
 
 	function messageService(constants, values, $q, $http){
 
-		function get(id){
+		function get(id, type){
 
-			var endpoint = '/api/messages/';
+			var endpoint;
 
-			if(id){
-				endpoint += id;
+			if(type === 'message'){
+				endpoint = constants.endpoints.getMessage.replace('{id}', id);
 			}
 			else{
-				endpoint += 'new';
+				endpoint = constants.endpoints.getLayout.replace('{id}', id);				
 			}
+
+			console.log(endpoint);
 
 			return $http.get(endpoint).then(function onOk(response){
 				return response.data;

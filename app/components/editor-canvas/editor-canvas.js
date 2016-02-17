@@ -58,7 +58,12 @@ function editorCanvasDirective(angular, app) {
 						return change;
 					});
 
-					scope.getMessage(scope).then(onGetMessage).then(setupDroppableArea);
+
+
+					var a  = scope.getMessage({id :1, messageType: 'layout'});
+						
+						a.then(onGetMessage)
+						.then(setupDroppableArea);
 
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {
 		        //     if (newValue === oldValue) {

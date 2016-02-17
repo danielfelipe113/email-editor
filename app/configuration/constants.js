@@ -25,11 +25,17 @@ function constants(angular, app, options, _){
         multiColumnClass: 'multiColumn',
 		onEditorContentChangeMessage: 'OnEditorContentChange',
 		storageEditorContentKey: 'EditorContent',
-        defaultValueText: '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, magni natus voluptas vero sit nesciunt consequatur eveniet iure tempora ex! Quas iure mollitia aut aspernatur. Voluptas non harum reiciendis vel? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, nobis, at, accusamus cumque sit laboriosam non voluptatibus totam iste fugit earum harum nam voluptates officiis et laudantium rem dolorem minus!</p>',
+        textEditorToolbar: ['bold', 'italic', 'underline','|','formatOL', 'formatUL','|', 'align','|', 'indent', 'outdent','|','fontFamily', 'fontSize','color','|','insertLink'],
         autoSaveFrequency: 180000,
         allowedHtml: null,
         debug: false,
-        loaded: false
+        loaded: false,
+        endpoints:{
+            'getContentBlocks':'/api/contentblocks',
+            'getLayouts':'/api/layouts',
+            'getLayout':'/api/layouts/{id}',
+            'getMessage':'/api/messages/{id}'
+        }
 	};
 
 	_.extend(defaultOptions, options);

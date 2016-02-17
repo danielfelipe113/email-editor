@@ -37,9 +37,36 @@
 			position:absolute;
 			top:0;
 			bottom:0;
+			padding:0;
+
+			ul {
+				padding:0;
+				
+				li{
+					a{
+						display:block;
+						background-color:#454072;	
+					    padding: 15px 1px;
+					    color:white;
+					    margin: 3px 0;
+					    font-size:12px;
+					    text-align:center;
+				    	text-decoration:none;
+				    }
+
+				    &:hover a{
+				    	background-color:#6b678e;
+
+				    }
+
+				    &.active a{
+				    	background-color:#9693a9
+				    }
+				}
+			}
 		}
 
-		#layout-content-blocks{
+		#layout-content-blocks{	
 			padding-top:20px;
 		    background-color: #3f4652;
 		    position: absolute;

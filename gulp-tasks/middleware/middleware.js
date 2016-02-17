@@ -9,11 +9,13 @@ function middleware(){
         bowerFolder = path.resolve(__dirname, "../../"),
         routes = {
             '/': '/dist/index.html',
-            '/api/messages/new':'/app/test/get-layout.html',
-            '/api/messages/1':'/app/test/get-message.json'
+            '/api/contentblocks': '/gulp-tasks/middleware/storage/get-content-blocks.json',
+            '/api/layouts':'/gulp-tasks/middleware/storage/get-layouts.json',
+            '/api/layouts/1':'/gulp-tasks/middleware/storage/get-layout-basic.html',
+            '/api/layouts/2':'/gulp-tasks/middleware/storage/get-layout-hero.html',
+            '/api/messages/1':'/gulp-tasks/middleware/storage/get-message.json'
         },
         routeHandlers = {
-            '/api/contentblocks': promotionsIntegration.getPromotions
         };
 
     function middleware(req, res, next){
