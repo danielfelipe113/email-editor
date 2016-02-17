@@ -18,7 +18,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 	*
 	* @description
 	*  Email Text Editor
-	* 
+	*
 	* @example
 	<div data-editor-text></div>
 	 */
@@ -36,7 +36,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 				actionType = 'Text Editor Change',
 				lastValue,
 				contentBlockId,
-				defaultValue;			
+				defaultValue;
 
 			function init(){
 
@@ -208,7 +208,7 @@ window.editorText = function editorText(angular, app, onReadyCallback) {
 
 			//     var $wrapper = element.clone();
 
-			//     if ($wrapper.attr('contenteditable')) { // Text-Image Combo 
+			//     if ($wrapper.attr('contenteditable')) { // Text-Image Combo
 			//         stripAttributesForSaving($wrapper);
 			//     }
 			//     else {

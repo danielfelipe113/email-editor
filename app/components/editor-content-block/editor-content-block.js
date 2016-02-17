@@ -36,12 +36,6 @@ function editorContentBlockDirective(angular, app) {
 				element = $(element);
 				element.attr('data-id', scope.$id);
 
-				/*scope.performUndoRedo.promise.then(null, function(change){
-					if(change.actionType === 'remove'){
-					 	console.log('removed!', change);
-					}
-				}, null);*/
-
 				setupContentBlockElements();
 			}
 
@@ -67,14 +61,14 @@ function editorContentBlockDirective(angular, app) {
 				hoverMenuBar.find('.duplicate').on('click', function duplicateContentBlock(){
 					var duplicate = getCleanHtml(element.clone());
 					duplicate.insertAfter(element);
-					notifyChange('duplicate', 1, duplicate.data('id'), '', $.fn.outerHTML(duplicate));
+					notifyChange('duplicate', 1, duplicate.data('id'), null, { value: $.fn.outerHTML(duplicate), position: element.index() });
 					compile(duplicate)(scope);
 				});
 
 				hoverMenuBar.find('.delete').on('click', function deleteContentBlock(){
 					element.remove();
 
-					notifyChange('remove', 1, element.data('id'), $.fn.outerHTML(element), '');
+					notifyChange('remove', 1, element.data('id'), { value: $.fn.outerHTML(element), position: element.index() }, null);
 				});
 
 				var overlay = $('#viewTemplates .' + constants.overlayClass).clone();
@@ -89,7 +83,7 @@ function editorContentBlockDirective(angular, app) {
 
 				// adding active class
 				element
-					.on('click', 
+					.on('click',
 						'.' + constants.overlayClass + ', .' + constants.overlayMenuBarClass + ' .edit',
 						function onClick(){
 							element

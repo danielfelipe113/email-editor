@@ -49,13 +49,26 @@ function editorCanvasDirective(angular, app) {
 			init();
 
     		function init(){
-					// TODO: listener on reorder for undo/redo
-					scope.performUndoRedo.promise.then(null, null, function(change){
-						console.log('REORDER PROMISE', change);
-						if(change.actionType === 'reorder') {
-							//scope.performReorder(actionDescriptor);
+
+					scope.performUndoRedo.promise.then(null, null, function(actionDescriptor){
+						console.log('action promise', actionDescriptor);
+						// ONLY IF UNDO. TODO: REDO FUNCTIONALITY
+						if(actionDescriptor.description === 'remove') {
+							// create and append the new content block
+							var removedContentBlockHtml = actionDescriptor.previousValue;
+							var newContentBlock = $.parseHTML(removedContentBlockHtml);
+							element.append(newContentBlock);
+
+							// get the initial position
+							var initialIndex = {
+									position: element.find('.' + constants.contentBlockClass).index(newContentBlock),
+									value: newContentBlock
+							};
+
+							// move the contentblock to the position before delete
+							alterContentBlockPosition(initialIndex, actionDescriptor.CurrentValue);
 						}
-						return change;
+
 					});
 
 
@@ -77,6 +90,21 @@ function editorCanvasDirective(angular, app) {
 		        //     }
 		        // });
       		}
+
+					/**
+					 * @name alterContentBlockPosition
+					 * @description Organizes content block positions for undo/redo
+					 */
+					function alterContentBlockPosition(currentIndex, destinationIndex) {
+							var movedContent = element.find('.' + constants.contentBlockClass + ':eq(' + currentIndex.position + ')');
+							var elementInDestinationIndex = element.find('.' + constants.contentBlockClass + ':eq(' + destinationIndex.position + ')');
+
+							if (currentIndex.position > destinationIndex.position) {
+									movedContent.insertBefore(elementInDestinationIndex);
+							} else {
+									movedContent.insertAfter(elementInDestinationIndex);
+							}
+					}
 
         	/**
         	 * @name setupDroppableArea
