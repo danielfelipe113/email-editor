@@ -104,8 +104,6 @@
 			}
 		]);
 
-    require('./components/prueba/prueba.js')(angular, app);
-
     /**
     * @function
     * @name
@@ -151,8 +149,4 @@
 	// Underscore angular wrapper.
 	require('./helpers/underscore-provider.js')(angular, app);
 	require('./helpers/utils-provider.js')(angular, app, window.jQuery);
-
-	// Modal directive.
-	require('./components/modal/modal.js')(angular, app);
-	require('./components/modal/modal.service.js')(angular, app);
 })();

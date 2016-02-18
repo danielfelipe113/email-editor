@@ -8,18 +8,16 @@ function emailEditorDirective(angular, app) {
 	require('./../../services/message.js')(angular, app);
 	require('./../../services/editor-actions.js')(angular, app);
 	require('./../../services/layout.js')(angular, app);
-	require('./../modal/modal.service.js')(angular, app);
 
 	// directives
 	require('./../draggable-content-block/draggable-content-block.js')(angular, app);
 	require('./../editor-content-block/editor-content-block.js')(angular, app);
 	require('./../editor-canvas/editor-canvas.js')(angular, app);
-	require('./../modal/modal.js')(angular, app);
 
 	app.directive('fbEmailEditor', emailEditorDirective);
 
 	emailEditorDirective.$inject = ['$log', '_', '$compile', '$q', 'email-editor.template.html', 'constants', 
-		'fbModalService', 'contentBlockService', 'messageService', 'editorActionsService', 'layoutService'];
+	'contentBlockService', 'messageService', 'editorActionsService', 'layoutService'];
 
 	/**
 	* @name app.directive: fbEmailEditor
@@ -31,7 +29,7 @@ function emailEditorDirective(angular, app) {
 	<fb-email-editor data-config="home.modalLoginConfig">
 	</fb-email-editor>
 	 */
-	function emailEditorDirective($log, _, compile, $q, template, constants, modalService, cbService, messageService, actionsService, layoutService){
+	function emailEditorDirective($log, _, compile, $q, template, constants, cbService, messageService, actionsService, layoutService){
 
 		return {
 			restrict:'E',
@@ -54,7 +52,8 @@ function emailEditorDirective(angular, app) {
 				undoEnabled = false,
 				redoEnabled = false,
 				currentMessageId,
-				currentTemplateType;
+				currentTemplateType,
+				layoutChanged = false;
 
 			init();
 
@@ -78,30 +77,12 @@ function emailEditorDirective(angular, app) {
 					layoutsVisible:false,
 					contentBlocksVisible:true,
 					designsVisible:false,
-					changeLayoutConfig:{
-						showHeader: true,
-						showFooter: false,
-						callbacks: {
-							onInit: undefined,
-							onShow: undefined,
-							onShown: undefined,
-							onHide: undefined,
-							onHidden: undefined,
-							onCancel: undefined,
-							onAccept: undefined
-						},
-						labels: {
-							title: 'Warning - Changing Layout',
-							cancel: 'Cancel',
-							accept: 'Accept'
-						},
-		        		cssClass: ''
-					},
 					currentLayout:0
 				});
 
 				self.undoRedoPromise = $q.defer();
 				self.performUndoRedo = $q.defer();
+				self.layoutChangedPromise = $q.defer();
 
 				self.undoRedoPromise.promise.then(null, null, function(change){
 					actionsService.saveChanges(change);
@@ -122,6 +103,15 @@ function emailEditorDirective(angular, app) {
 			 * @return {Object}             Get Message promise that contains the html to render
 			 */
 			function getMessage(id, messageType){
+
+				// in case there is no arguments, and 
+				// the layout has changed, request for the new layout
+				if(layoutChanged){
+					id = id || self.currentLayout;
+					messageType = messageType || constants.templateTypes.layout;
+					layoutChanged = false;
+				}
+
 				return messageService.get(id, messageType).then(function onMessageOk(response){
 
 					// logic to know which one is the current message we are composing
@@ -185,18 +175,14 @@ function emailEditorDirective(angular, app) {
 			 * @return {[type]} [description]
 			 */
 			function changeLayout(layoutId){
-				console.log(layoutId);
-
 				// check if we are not selecting exactly the same layout id
-				if(!(constants.templateTypes.layout === currentTemplateType && layoutId === currentMessageId)){
-
-					modalService.openModal('changeLayoutModal');
-
-					// change the layout
+				if(constants.templateTypes.layout === currentTemplateType && layoutId === currentMessageId){
 					return;
 				}
 
-				modalService.openModal('changeLayoutModal');
+				self.currentLayout = layoutId;
+				layoutChanged = true;
+				self.layoutChangedPromise.notify();
 			}
 
 			/**
