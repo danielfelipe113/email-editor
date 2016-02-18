@@ -34,7 +34,8 @@ function constants(angular, app, options, _){
             'getContentBlocks':'/api/contentblocks',
             'getLayouts':'/api/layouts',
             'getLayout':'/api/layouts/{id}',
-            'getMessage':'/api/messages/{id}'
+            'getMessage':'/api/messages/{id}',
+						'getPromotions': '/api/promotions'
         }
 	};
 

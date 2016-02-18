@@ -83,19 +83,20 @@ function promotionsIntegration(querystring, fs, path){
           var req = http.request(options, (res) => {
             res.setEncoding('utf8');
             res.on('data', (chunk) => {
-              promotions += chunk; 
+              promotions += chunk;
             });
             res.on('end', () => {
               promotions = JSON.parse(promotions).promotions;
               promotions = randomizeArray(promotions).slice(0,5);
-              promotions = promotions.map(function(el){ 
+              promotions = promotions.map(function(el){
                   return {
                       name: el.name,
                       description: el.description,
                       type: el.type
                   };
               });
-              getContentBlocks(promotions);
+
+              response.end(JSON.stringify(promotions), 'utf-8');
             })
           });
 
@@ -118,19 +119,9 @@ function promotionsIntegration(querystring, fs, path){
                   .replace('{{description}}', promotions[i].description)
                   .replace('{{type}}', promotions[i].type);
           };
-
-
-          fs.readFile(bowerFolder + '/app/test/get-content-blocks.json', 'utf8', function (err, data) {
-            if (err) throw err;
-            data = JSON.parse(data);
-            data[data.length-1].html = data[data.length-1].html.replace('##content##', contentHtml);
-            response.end(JSON.stringify(data), 'utf-8');
-          });
       }
 
-      getContentBlocks([]);
-
-      //getAccessToken(getPromotions);
+      getAccessToken(getPromotions);
   }
 
   return {
