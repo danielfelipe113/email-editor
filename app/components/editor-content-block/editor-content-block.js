@@ -145,8 +145,8 @@ function editorContentBlockDirective(angular, app) {
 
 					for(var keys in editableArea.data()){
 
-						// check for data-editor attributes on editable area
-						if(keys.indexOf('editor') === 0 && !editorsLoaded[keys]){
+						// check for data-editor or data-content attributes on editable area
+						if((keys.indexOf('editor') === 0 || keys.indexOf('content') === 0) && !editorsLoaded[keys]){
 
 							editorsLoaded[keys] = keys;
 

@@ -28,6 +28,7 @@ function constants(angular, app, options, _){
             'getContentBlocks':'/api/contentblocks',
             'getLayouts':'/api/layouts',
             'getLayout':'/api/layouts/{id}',
+<<<<<<< HEAD
             'getMessage':'/api/messages/{id}'
         },
         defaultMessage:{
@@ -37,6 +38,10 @@ function constants(angular, app, options, _){
         templateTypes :{
             message: 'message',
             layout:'layout'
+=======
+            'getMessage':'/api/messages/{id}',
+						'getPromotions': '/api/promotions'
+>>>>>>> 2f9ecb8e03b0d0250e97df092f707ceba9ddf8ed
         }
 	};
 

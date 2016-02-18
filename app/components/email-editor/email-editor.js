@@ -177,7 +177,7 @@ function emailEditorDirective(angular, app) {
 			function showDesigns(){
 				self.contentBlocksVisible = false;
 				self.layoutsVisible = false;
-				self.designsVisible = true;	
+				self.designsVisible = true;
 			}
 
 			/**

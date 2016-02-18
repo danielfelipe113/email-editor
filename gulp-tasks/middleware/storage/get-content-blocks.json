@@ -78,6 +78,6 @@
 		"thumbnailUrl":"/images/contentblocks/offerblockpreview_new.jpg",
 		"description":"Promotions Manager Content Block",
 		"name":"PromotionsBlock",
-		"html":"<table class=\"row editor-content-block\" data-undo-redo-promise=\"undoRedoPromise\" data-promotions=\"true\"><tr><td editable=\"true\" align=\"center\"><ul>##content##</ul></td></tr></table>"
+		"html":"<table class=\"row editor-content-block\" data-undo-redo-promise=\"undoRedoPromise\"><tr><td data-editable=\"true\" data-content-promotions=\"true\" align=\"center\"></td></tr></table>"
 	}
 ]

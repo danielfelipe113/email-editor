@@ -16,6 +16,7 @@ function middleware(){
             '/api/messages/1':'/gulp-tasks/middleware/storage/get-message.json'
         },
         routeHandlers = {
+            '/api/promotions': promotionsIntegration.getPromotions
         };
 
     function middleware(req, res, next){
@@ -36,7 +37,7 @@ function middleware(){
             custom = true;
         }
 
-        var fileExists = fs.existsSync(folder + fileName);  
+        var fileExists = fs.existsSync(folder + fileName);
         if(custom && fileExists){
             return fs.readFile(folder + fileName, function(error, content) {
                 res.setHeader("Content-Type", mime.lookup(fileName));
