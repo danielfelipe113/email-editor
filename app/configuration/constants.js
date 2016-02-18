@@ -5,10 +5,6 @@ function constants(angular, app, options, _){
 		sessionKey: null,
 		hasSocialMediaEnabled: false,
 		maxFileSize: 5 * 1048576,  // 5 MB
-		editorDefinitions: {
-            TextOnlyEditor: 'text',
-            ImageEditor: 'image'
-        },
         contentBlockEvents: {
             Reordered: 'Content Blocks Reordered',
             Deleted: 'Content Block Deleted',
@@ -28,13 +24,19 @@ function constants(angular, app, options, _){
         textEditorToolbar: ['bold', 'italic', 'underline','|','formatOL', 'formatUL','|', 'align','|', 'indent', 'outdent','|','fontFamily', 'fontSize','color','|','insertLink'],
         autoSaveFrequency: 180000,
         allowedHtml: null,
-        debug: false,
-        loaded: false,
         endpoints:{
             'getContentBlocks':'/api/contentblocks',
             'getLayouts':'/api/layouts',
             'getLayout':'/api/layouts/{id}',
             'getMessage':'/api/messages/{id}'
+        },
+        defaultMessage:{
+            id:1,
+            type:'layout'
+        },
+        templateTypes :{
+            message: 'message',
+            layout:'layout'
         }
 	};
 

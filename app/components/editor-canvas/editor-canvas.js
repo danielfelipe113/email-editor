@@ -73,9 +73,8 @@ function editorCanvasDirective(angular, app) {
 
 
 
-					var a  = scope.getMessage({id :1, messageType: 'layout'});
-						
-						a.then(onGetMessage)
+					scope.getMessage()
+						.then(onGetMessage)
 						.then(setupDroppableArea);
 
 		        // scope.$watch('disableOverlays', function(newValue, oldValue) {

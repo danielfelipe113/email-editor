@@ -10,19 +10,26 @@ function messageServiceWrapper(angular, app) {
 
 		function get(id, type){
 
+			id = id || constants.defaultMessage.id;
+			type = type || constants.defaultMessage.type;
+
 			var endpoint;
 
-			if(type === 'message'){
+			if(type === constants.templateTypes.message){
 				endpoint = constants.endpoints.getMessage.replace('{id}', id);
 			}
 			else{
 				endpoint = constants.endpoints.getLayout.replace('{id}', id);				
 			}
 
-			console.log(endpoint);
-
 			return $http.get(endpoint).then(function onOk(response){
-				return response.data;
+				response = {
+					html: response.data,
+					id: id,
+					type: type
+				};
+
+				return response;
 			});
 		}
 

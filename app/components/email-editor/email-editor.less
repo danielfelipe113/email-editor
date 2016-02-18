@@ -74,32 +74,40 @@
 		    bottom: 0;
 		    overflow-y: scroll;
 		    overflow-x: hidden;
-
-		    .draggable-content-block{
-
-		    	margin-bottom:15px;
-
-		    	&:hover{
-
-		    		cursor:pointer;
-
-				    & > div{
-				    	border: 2px solid #00b8d9;
-					    outline: 2px solid rgba(0,184,217,0);
-					    box-shadow: 0 0 8px 2px #00b8d9;
-				    }
-		    	}
-
-		    	& > div{
-		    		border: 2px solid transparent;
-		    	}
-		    }
-
-		    .img-polaroid{
-		    	width:100%;
-		    	border:solid 1px #fff;
-		    }
 		}
+
+	    .draggable-content-block,
+	    .layout{
+
+	    	margin-bottom:15px;
+	    	color:white;
+
+	    	&:hover{
+
+	    		cursor:pointer;
+
+			    & > div{
+			    	border: 2px solid #00b8d9;
+				    outline: 2px solid rgba(0,184,217,0);
+				    box-shadow: 0 0 8px 2px #00b8d9;
+			    }
+	    	}
+
+	    	& > div{
+	    		border: 2px solid transparent;
+	    	}
+
+	    	&.layoutActive:before{
+	    		content:'Selected';
+	    	}
+
+
+	    }
+
+	    .img-polaroid{
+	    	width:100%;
+	    	border:solid 1px #fff;
+	    }
 	}
 
 	#content{

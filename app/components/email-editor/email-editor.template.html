@@ -39,10 +39,9 @@
                         </div>
                         <div class="row" data-ng-show="editorCtrl.designsVisible"></div>
                         <div class="row" data-ng-show="editorCtrl.layoutsVisible">
-                            <div class="col-xs-12" data-ng-repeat="layout in editorCtrl.layouts">
-                                <div data-dropped-html="{{::layout.html}}">
-                                    <img data-ng-src="{{layout.thumbnailUrl}}" alt="{{layout.name}}" class="img-polaroid"/>
-                                </div>
+                            <div class="col-xs-12 layout" data-ng-class="{layoutActive: editorCtrl.currentLayout == layout.id }" data-ng-click="editorCtrl.changeLayout(layout.id)" data-ng-repeat="layout in editorCtrl.layouts">
+                                <p>{{::layout.name}}</p>
+                                <img data-ng-src="{{layout.thumbnailUrl}}" alt="{{layout.name}}" class="img-polaroid"/>
                             </div>
                         </div>
                     </div>

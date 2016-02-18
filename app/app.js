@@ -1,6 +1,7 @@
 (function() {
     'use strict';
 
+
     var constants = $('#constants').data(),
     	values = $('#values').data(),
 		app = angular
@@ -102,6 +103,8 @@
                 };
 			}
 		]);
+
+    require('./components/prueba/prueba.js')(angular, app);
 
     /**
     * @function
